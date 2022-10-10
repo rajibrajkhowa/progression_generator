@@ -71,8 +71,9 @@ impl HpGen for Input {
         output.push(b);
 
         for _i in 1..x {
-            b = (b + *(&self.d)).powi(-1);
-            output.push(b);
+            b = b + *(&self.d);
+            let c: f64 = b.powi(-1);
+            output.push(c);
         }
         return output;
         }
