@@ -33,7 +33,7 @@ impl ApGen for Input {
                 output.push(b);
            }
            else {
-            continue;
+            exit(1);
            }
         }
         return output;
@@ -61,7 +61,7 @@ impl GpGen for Input {
                 output.push(b);
            }
            else {
-            continue;
+            exit(1);
            }
         }
         return output;
@@ -90,7 +90,7 @@ impl HpGen for Input {
                output.push(c);
             }
             else {
-                continue;
+                exit(1);
                }
             }
         return output;
