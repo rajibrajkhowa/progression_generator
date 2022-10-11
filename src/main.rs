@@ -1,6 +1,9 @@
 use std::process::exit;
 use std::io;
 
+pub const MAX: f64 = f64::MAX;
+pub const MIN: f64 = f64::MIN;
+
 #[derive(Debug)]
 
 struct Input {
@@ -26,7 +29,12 @@ impl ApGen for Input {
 
         for _i in 1..x {
             b = b + *(&self.d);
-            output.push(b);
+            if b < MAX {
+                output.push(b);
+           }
+           else {
+            continue;
+           }
         }
         return output;
     }
@@ -49,7 +57,12 @@ impl GpGen for Input {
 
         for i in 1..x {
             b = *(&self.a) * (*(&self.d)).powi(i) as f64;
-            output.push(b);
+            if b < MAX {
+                output.push(b);
+           }
+           else {
+            continue;
+           }
         }
         return output;
     }
@@ -73,8 +86,13 @@ impl HpGen for Input {
         for _i in 1..x {
             b = b + *(&self.d);
             let c: f64 = b.powi(-1);
-            output.push(c);
-        }
+            if c > MIN {
+               output.push(c);
+            }
+            else {
+                continue;
+               }
+            }
         return output;
         }
 }
