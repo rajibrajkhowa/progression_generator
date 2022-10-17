@@ -1,4 +1,3 @@
-use std::env;
 /// This is a simple RUST program to generate Arithmetic Progression, Geometrice Progression and Harmonic Progression
 ///
 /// The usage is cargo run <initial value> <common difference/common ratio> <number of terms> <type of progression to be generated>
@@ -12,7 +11,7 @@ use std::env;
 /// Say, if I want to generate an Harmonic Progression with initial value 1, common difference 2 and say upto 10 terms,
 /// I would write the command as cargo run 1 2 10 HP
 use std::process::exit;
-
+use std::env;
 pub const MAX: f64 = f64::MAX;
 pub const MIN: f64 = f64::MIN;
 
