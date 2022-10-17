@@ -1,5 +1,17 @@
+use std::env;
+/// This is a simple RUST program to generate Arithmetic Progression, Geometrice Progression and Harmonic Progression
+///
+/// The usage is cargo run <initial value> <common difference/common ratio> <number of terms> <type of progression to be generated>
+///
+/// Say, if I want to generate an Arithmetic Progression with initial value 1, common difference 2 and say upto 10 terms,
+/// I would write the command as cargo run 1 2 10 AP
+///
+/// Say, if I want to generate an Geometric Progression with initial value 1, common ratio 2 and say upto 10 terms,
+/// I would write the command as cargo run 1 2 10 GP
+///
+/// Say, if I want to generate an Harmonic Progression with initial value 1, common difference 2 and say upto 10 terms,
+/// I would write the command as cargo run 1 2 10 HP
 use std::process::exit;
-use std::io;
 
 pub const MAX: f64 = f64::MAX;
 pub const MIN: f64 = f64::MIN;
@@ -9,132 +21,117 @@ pub const MIN: f64 = f64::MIN;
 struct Input {
     a: f64,
     d: f64,
-    n: f64
+    n: f64,
+    s: String,
 }
 
-
-trait ApGen {
-    fn ap_generator(&self) -> Vec<f64>;
-}
-
-
-impl ApGen for Input {
-
+impl Input {
     fn ap_generator(&self) -> Vec<f64> {
+        if *(&self.s) == "AP" {
+            let mut output: Vec<f64> = Vec::new();
+            let mut b = *(&self.a);
+            let x = *(&self.n) as u64;
+            output.push(b);
 
-        let mut output: Vec<f64> = Vec::new();
-        let mut b = *(&self.a);
-        let x = *(&self.n) as u64;
-        output.push(b);
-
-        for _i in 1..x {
-            b = b + *(&self.d);
-            if b < MAX {
-                output.push(b);
-           }
-           else {
+            for _i in 1..x {
+                b = b + *(&self.d);
+                if b < MAX {
+                    output.push(b);
+                } else {
+                    exit(1);
+                }
+            }
+            return output;
+        } else {
             exit(1);
-           }
         }
-        return output;
     }
-}
-
-
-trait GpGen {
-    fn gp_generator(&self) -> Vec<f64>;
-}
-
-
-impl GpGen for Input {
 
     fn gp_generator(&self) -> Vec<f64> {
+        if *(&self.s) == "GP" {
+            let mut output: Vec<f64> = Vec::new();
+            let mut b = *(&self.a);
+            let x = *(&self.n) as i32;
+            output.push(b);
 
-        let mut output: Vec<f64> = Vec::new();
-        let mut b = *(&self.a);
-        let x = *(&self.n) as i32;
-        output.push(b);
-
-        for i in 1..x {
-            b = *(&self.a) * (*(&self.d)).powi(i) as f64;
-            if b < MAX {
-                output.push(b);
-           }
-           else {
+            for i in 1..x {
+                b = *(&self.a) * (*(&self.d)).powi(i) as f64;
+                if b < MAX {
+                    output.push(b);
+                } else {
+                    exit(1);
+                }
+            }
+            return output;
+        } else {
             exit(1);
-           }
         }
-        return output;
+    }
+    fn hp_generator(&self) -> Vec<f64> {
+        if *(&self.s) == "HP" {
+            let mut output: Vec<f64> = Vec::new();
+            let mut b = (*(&self.a)).powi(-1);
+            let x = *(&self.n) as u64;
+            output.push(b);
+
+            for _i in 1..x {
+                b = b + *(&self.d);
+                let c: f64 = b.powi(-1);
+                if c > MIN {
+                    output.push(c);
+                } else {
+                    exit(1);
+                }
+            }
+            return output;
+        } else {
+            exit(1);
+        }
     }
 }
-
-
-trait HpGen {
-    fn hp_generator(&self) -> Vec<f64>;
-}
-
-
-impl HpGen for Input {
-
-    fn hp_generator(&self) -> Vec<f64> {
-
-        let mut output: Vec<f64> = Vec::new();
-        let mut b = (*(&self.a)).powi(-1);
-        let x = *(&self.n) as u64;
-        output.push(b);
-
-        for _i in 1..x {
-            b = b + *(&self.d);
-            let c: f64 = b.powi(-1);
-            if c > MIN {
-               output.push(c);
-            }
-            else {
-                exit(1);
-               }
-            }
-        return output;
-        }
-}
-
-
 
 fn main() {
+    let args: Vec<String> = env::args().collect();
 
-    let mut x = String::new();
-    println!("Please enter the initial number:");
-    io::stdin().read_line(&mut x).expect("Number not entered");
-    let x: f64 = x.trim().parse().expect("Please type a number");
+    let w = &args[1];
+    let w: f64 = w.trim().parse().expect("Please type a number");
 
-    if x == 0.0 {
+    if w == 0.0 {
         println!("The first element of a progression cannot be zero");
         exit(1);
-
     }
 
-    let mut y = String::new();
-    println!("Please enter the common difference or common ratio:");
-    io::stdin().read_line(&mut y).expect("Number not entered");
+    let x = &args[2];
+    let x: f64 = x.trim().parse().expect("Please type a number");
+
+    let y = &args[3];
     let y: f64 = y.trim().parse().expect("Please type a number");
 
-    let mut z = String::new();
-    println!("Please enter the number of terms to be generated:");
-    io::stdin().read_line(&mut z).expect("Number not entered");
-    let z: f64 = z.trim().parse().expect("Please type a number");
+    let z = &args[4];
 
-    let input = Input { a: x, d: y, n: z};
-    let mut prog = String::new();
-    println!("Please enter the type of progression to be generated [AP or GP or HP]:");
-    io::stdin().read_line(&mut prog)
-       .ok()
-       .expect("Type of progression to be generated is not entered");
-    
-    match prog.trim() {
+    let input = Input {
+        a: w,
+        d: x,
+        n: y,
+        s: z.to_string(),
+    };
 
-        "AP" =>  println!("The arithmetic progression generated for {:?} is {:?}", input, input.ap_generator()),
-        "GP" =>  println!("The geometric progression generated for {:?} is {:?}", input, input.gp_generator()),
-        "HP" =>  println!("The harmonic progression generated for {:?} is {:?}", input, input.hp_generator()),
-         _ =>    println!("Something went wrong. No progression type entered. Try again")
+    match input.s.trim() {
+        "AP" => println!(
+            "The arithmetic progression generated for {:?} is \n {:#?}",
+            input,
+            input.ap_generator()
+        ),
+        "GP" => println!(
+            "The geometric progression generated for {:?} is \n {:#?}",
+            input,
+            input.gp_generator()
+        ),
+        "HP" => println!(
+            "The harmonic progression generated for {:?} is \n {:#?}",
+            input,
+            input.hp_generator()
+        ),
+        _ => println!("Something went wrong. No progression type entered. Try again"),
     }
-
 }
